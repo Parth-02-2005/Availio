@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:17
+    container_name: plannova_db
+    restart: unless-stopped
+    tty: true
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./server/dev-data/postgres:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    labels:
+      org.opencontainers.image.title: "postgres"
+      org.opencontainers.image.environment: "dev"
+      
+    networks:
+      - plannova_network
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U user"]
+    #   interval: 10s
+    #   retries: 5
+  pgadmin:
+    image: dpage/pgadmin4:9
+    container_name: plannova_pgadmin
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "5051:80"
+    depends_on: 
+      - db
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=gandhiparth.02.2005@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=1234
+    labels:
+      org.opencontainers.image.title: "postgres"
+      org.opencontainers.image.environment: "dev"
+    networks:
+      - plannova_network
+  
+
+  # server:
+  #   build:
+  #     context: ./server
+  #   container_name: availio-server
+  #   restart: unless-stopped
+  #   ports:
+  #     - "5000:5000"
+  #   depends_on:
+  #     - db
+  #   environment:
+  #     DATABASE_URL: postgresql://user:password@db:5432/mydb
+  #   volumes:
+  #     - ./server:/app
+
+networks:
+  plannova_network:
+    driver: bridge

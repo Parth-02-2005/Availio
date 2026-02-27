@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     tty: true
     environment:
-      POSTGRES_USER: user
+      POSTGRES_USER: user 
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mydb
     ports:
@@ -20,10 +20,7 @@ services:
       
     networks:
       - plannova_network
-    # healthcheck:
-    #   test: ["CMD-SHELL", "pg_isready -U user"]
-    #   interval: 10s
-    #   retries: 5
+    
   pgadmin:
     image: dpage/pgadmin4:9
     container_name: plannova_pgadmin
@@ -41,6 +38,20 @@ services:
       org.opencontainers.image.environment: "dev"
     networks:
       - plannova_network
+
+  client:
+    build:
+      context: ./client
+    container_name: availio-client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: npm run dev -- --host
+    networks:
+      - plannova_network
+    restart: unless-stopped
   
 
   # server:

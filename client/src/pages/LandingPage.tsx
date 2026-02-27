@@ -24,7 +24,7 @@ const DynamicPremiumLanding = () => {
         {/* Hero Section 
             Contains the dynamic switching UI (Dashboard, Booking, Sync).
         */}
-        <Hero />
+        <Hero  />
 
         {/* Features Section 
             The 3-card sliding carousel with professional capability headers.

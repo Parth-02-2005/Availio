@@ -88,7 +88,7 @@ export const Hero = () => {
   ];
 
   return (
-    <section className="relative bg-[#f9fafb] overflow-hidden pt-16 pb-32 px-6 md:px-10">
+    <section className="relative bg-[#f9fafb] mt-2 overflow-hidden pt-16 pb-32 px-6 md:px-10">
       {/* Background Decorative Gradients */}
       <div className="absolute top-0 right-0 -z-10 w-1/2 h-full bg-gradient-to-l from-indigo-50/50 to-transparent" />
       

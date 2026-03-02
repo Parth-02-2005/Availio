@@ -3,4 +3,4 @@ import { authenticationController } from './controllers/authentication.controlle
 
 export const router = Router();
 
-router.use('/auth',authenticationController)
+router.use('/auth',authenticationController.router)

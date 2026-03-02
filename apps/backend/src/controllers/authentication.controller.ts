@@ -1,10 +1,10 @@
-import { Request, Response, Router } from 'express';
+import { Request, Response } from 'express';
 import { LoginBody, UserResponse } from '../schema/auth.schema';
 import { OpenAPIRegistry } from "@asteasolutions/zod-to-openapi";
 import { login } from '../services/authentication.service';
-import { ZodError } from 'zod';
+import { createRouter } from '../config/router.handler';
 
-export const authenticationController = Router();
+export const authenticationController = createRouter()
 
 export const authenticationRegistry = new OpenAPIRegistry();
 
@@ -35,9 +35,9 @@ authenticationRegistry.registerPath({
 });
 
 authenticationController.post('/login', async (req: Request, res: Response) => {
-  
+
   let parsed = LoginBody.parse(req.body);
-  
+
   try {
 
     let data = await login(parsed.email, parsed.password);
@@ -45,12 +45,7 @@ authenticationController.post('/login', async (req: Request, res: Response) => {
     return res.status(200).json(data);
 
   } catch (error) {
-    console.log('er ::: ',error)
-      if(error instanceof ZodError){
-        return res.status(400).json({
-          message: "Invalid request body",
-          errors: error.issues
-        })
-      }
+    console.error("Error during login:", error);
+    throw error;
   }
 })

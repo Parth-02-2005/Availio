@@ -1,4 +1,3 @@
-import prismaConfig from "../../prisma.config"
 import { NotFoundError } from "../classes/AppError";
 import { getPrismaClient } from "../handlers/database.handler"
 import { UserLoginResponse, UserResponse } from "../schema/auth.schema";
@@ -6,7 +5,7 @@ import { UserLoginResponse, UserResponse } from "../schema/auth.schema";
 export const login = async (email: string, password: string): Promise<UserLoginResponse> => {
     let db = getPrismaClient();
 
-    let user = db.user.findUnique({
+    let user = await db.user.findUnique({
         where: {
             email: email
         }

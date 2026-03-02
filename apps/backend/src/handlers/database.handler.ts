@@ -1,6 +1,7 @@
-import { PrismaPostgresAdapter } from "@prisma/adapter-ppg";
 import { DATABASE_URL } from "../constants";
-import { PrismaClient } from "../generated/prisma/client";
+import { PrismaClient } from "../generated/prisma";
+import { PrismaPg } from "@prisma/adapter-pg";
+
 
 let prismaClient: PrismaClient | null = null;
 
@@ -9,8 +10,8 @@ export const getPrismaClient = () => {
         throw new Error("DATABASE_URL is not defined in environment variables.")
     }
     if (!prismaClient) {
-        const adapter = new PrismaPostgresAdapter({ connectionString: DATABASE_URL })
-        prismaClient = new PrismaClient({ adapter })
+        const adapter = new PrismaPg({ connectionString: DATABASE_URL });
+        prismaClient = new PrismaClient({ adapter });
     }
     return prismaClient;
 }

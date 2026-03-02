@@ -1,11 +1,7 @@
 import express from "express"
-import dotenv from "dotenv"
-import prisma from "./config/db.ts"
-
-dotenv.config()
+import { PORT } from "./constants.ts"
 
 const app=express()
-const PORT = process.env.PORT;
 
 app.listen(PORT,()=>{
     console.log(`Server running on http://localhost:${PORT}`)

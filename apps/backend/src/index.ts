@@ -9,7 +9,7 @@ app.use(express.json());
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
-app.use('/api/v1',router)
+app.use('/api/v1',router);
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');

@@ -1,10 +1,12 @@
 import { OpenApiGeneratorV3 } from "@asteasolutions/zod-to-openapi";
 import { authenticationRegistry } from "../controllers/authentication.controller";
+import { userEventsRegistry } from "../controllers/eventType.controller";
 
 // Later generate the full doc
 const generator = new OpenApiGeneratorV3(
   [
-    ...authenticationRegistry.definitions
+    ...authenticationRegistry.definitions,
+    ...userEventsRegistry.definitions
   ]
 );
 

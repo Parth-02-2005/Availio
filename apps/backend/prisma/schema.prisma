@@ -6,16 +6,114 @@ datasource db {
   provider = "postgresql"
 }
 
+// ENUMS
+enum RegistrationStatus {
+  PENDING @map("pending")
+  CONFIRMED
+  CANCELLED
+
+  @@map("registration_status")
+}
+
+enum Days {
+  SUNDAY @map("sunday")
+  MONDAY @map("monday")
+  TUESDAY @map("tuesday")
+  WEDNESDAY @map("wednesday")
+  THRUSDAY @map("thrusday")
+  FRIDAY @map("friday")
+  SATURDAY @map("saturday")
+
+}
+
+// USER
 model User {
-  id        String @id @default(uuid())
-  firstName String @map("first_name")
-  lastName  String @map("last_name")
-  email     String @unique
-  password  String
-  isActive  Boolean @default(true)
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  id         String   @id @default(uuid())
+  firstName  String   @map("first_name")
+  lastName   String   @map("last_name")
+  email      String   @unique
+  password   String
+  avatarUrl  String?  @map("avatar_url")
+  isActive   Boolean  @default(true) @map("is_active")
+  timezone   String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
+  // Relations
+  userEvents        UserEvents[]
+  // hostedEvents      EventRegistration[] @relation("HostEvents")
+  // guestRegistrations EventRegistration[] @relation("GuestEvents")
+  // eventSlots        EventSlot[]
+
   @@map("users")
+}
+
+// UserEVents
+model UserEvents {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  title       String
+  description String?
+  duration    Int      // minutes
+  isActive    Boolean  @default(true) @map("is_active")
+  location    String?
+
+  host User @relation(fields: [userId], references: [id])
+
+  registrations EventRegistration[]
+  userEventSlots UserEventSlots[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@index([userId])
+  @@map("user_events")
+}
+
+
+// User Event Slots (Availability)
+model UserEventSlots {
+  id         String @id @default(uuid())
+  userEventId     String @map("user_event_id")
+
+  dayOfWeek  Days    @map("day_of_week") 
+  startTime  String @map("start_time")  // Consider using DateTime if needed
+  breakStart String? @map("break_start")
+  breakEnd   String? @map("break_end")
+  endTime    String @map("end_time")
+
+  userEvent UserEvents @relation(fields: [userEventId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now())@updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@index([userEventId])
+  @@map("user_event_slots")
+}
+
+// EVENT REGISTRATION (Booking)
+model EventRegistration {
+  id          String   @id @default(uuid())
+
+  userEventId String   @map("user_event_id")
+
+  guestName   String   @map("guest_name")
+  guestEmail  String   @map("guest_email")
+
+  startTime   DateTime @map("start_time")
+  endTime     DateTime @map("end_time")
+
+  status      RegistrationStatus @default(PENDING)
+
+  eventType UserEvents @relation(fields: [userEventId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userEventId])
+  @@index([startTime])
+
+  @@map("event_registrations")
 }

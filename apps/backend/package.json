@@ -1,13 +1,14 @@
 {
-  "name": "backend",
+  "name": "@slotyn/backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "rm -rf prisma/generated && npx prisma generate",
-    "buid": "tsc",
+    "generate": "npx prisma generate",
+    "build": "tsc",
+    "start": "node dist/src/index.js",
     "migrate": "npx prisma migrate dev"
   },
   "keywords": [],

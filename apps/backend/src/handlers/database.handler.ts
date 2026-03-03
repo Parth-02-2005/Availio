@@ -1,6 +1,6 @@
 import { DATABASE_URL } from "../constants";
-import { PrismaClient } from "../generated/prisma";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@prisma/client";
 
 
 let prismaClient: PrismaClient | null = null;

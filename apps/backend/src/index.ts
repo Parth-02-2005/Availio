@@ -2,7 +2,6 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import { openApiSpec } from './config/swagger.config';
 import { router } from './router';
-import { eventTypeController } from './controllers/eventType.controller';
 
 const app = express();
 

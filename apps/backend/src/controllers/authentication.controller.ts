@@ -36,11 +36,11 @@ authenticationRegistry.registerPath({
 
 authenticationController.post('/login', async (req: Request, res: Response) => {
 
-  let parsed = LoginBody.parse(req.body);
+  let { email, password } = LoginBody.parse(req.body);
 
   try {
 
-    let data = await login(parsed.email, parsed.password);
+    let data = await login(email,password);
 
     return res.status(200).json(data);
 
